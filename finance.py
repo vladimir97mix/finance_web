@@ -8,7 +8,6 @@ app = Flask(__name__)
 def index():
     # Если метод формы POST
     if request.method == 'POST':
-
         # Забираем данные из формы
         date = request.form['date']
         products = request.form['text1']
@@ -23,15 +22,40 @@ def index():
         costs = (date, products, productsH, clothes, health, debts, communication, transport, fun)
 
         # Вносим данные в таблицу
-        # try:
         pgInsertUpdate(costs)
         return redirect('/')
-        # except:
-        #     return "При добавлении в базу данных произошла ошибка!"
 
     # Если метод GET
     else:
         return render_template("index.html")
+
+
+@app.route('/report', methods=['POST', 'GET'])
+def report():
+    if request.method == 'POST':
+        # Получение диапозона дат из формы
+        date_start = request.form['date_start']
+        date_end = request.form['date_end']
+        # Запрос в базу данных по диапозону дат
+        row = pgSelectForReport(date_start, date_end)
+        # Вернуть результат на веб страницу
+        return render_template('report.html', row=row, date_start=date_start, date_end=date_end)
+    else:
+        return render_template('report.html')
+
+
+def pgSelectForReport(date_start, date_end):
+    db = psycopg2.connect(
+        database="finance_db",
+        user="postgres",
+        password="b14b43b82b84",
+        host="127.0.0.1",
+        port="5432")
+    cursor = db.cursor()
+    # Запрос по диапозону дат
+    cursor.execute("""SELECT * FROM costs WHERE (Date BETWEEN '{0}' AND '{1}')""".format(str(date_start), str(date_end)))
+    row = cursor.fetchall()
+    return row
 
 
 def pgInsertUpdate(values):
@@ -45,13 +69,13 @@ def pgInsertUpdate(values):
     cursor = db.cursor()
     cursor.execute("""SELECT * FROM costs WHERE date='%s'""" % str(date))
     rows = cursor.fetchall()
-
+    print(rows)
     # Если такой строки нет то, добавляем новую строку
     if not rows:
         cursor.execute('''INSERT INTO costs VALUES %s''' % str(values))
         db.commit()
         db.close()
-    # Если нет то выполняем сложение с существующей строкой
+    # Если есть то выполняем сложение с существующей строкой
     else:
         rows_list = list(rows[0])  # Преобразовывем полученный кортеж в список для вычислений
         new_data = []  # Новый список значений
@@ -64,6 +88,7 @@ def pgInsertUpdate(values):
                 new_data.append(str(float(value1) + float(value2)))
         new_data = tuple(new_data)  # Преобразовывем новые данные обратно в кортеж
         print(new_data)
+        # Обновляем данные в бд
         cursor.execute("""UPDATE costs SET
                 products = '{0}',
                 productsh = '{1}',
