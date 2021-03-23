@@ -1,16 +1,8 @@
-import psycopg2
 from settings import dbstg
-
-# Настройки подключения к бд
-database = dbstg.stg['database']
-user = dbstg.stg['user']
-password = dbstg.stg['password']
-host = dbstg.stg['host']
-port = dbstg.stg['port']
 
 
 def pgSelectForReport(date_start, date_end):
-    db = psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
+    db = dbstg.connectToDb()
     cursor = db.cursor()
     # Запрос по диапозону дат
     cursor.execute(
@@ -21,7 +13,7 @@ def pgSelectForReport(date_start, date_end):
 
 def pgInsertUpdateCosts(values):
     date = values[0]
-    db = psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
+    db = dbstg.connectToDb()
     cursor = db.cursor()
     cursor.execute("""SELECT * FROM costs WHERE date='%s'""" % str(date))
     rows = cursor.fetchall()
@@ -48,7 +40,7 @@ def pgInsertUpdateCosts(values):
 
 def pgInsertUpdateIncome(values):
     date = values[0]
-    db = psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
+    db = dbstg.connectToDb()
     cursor = db.cursor()
     cursor.execute("""SELECT * FROM income WHERE date='%s'""" % str(date))
     rows = cursor.fetchall()
@@ -68,7 +60,7 @@ def pgInsertUpdateIncome(values):
 
 
 def pgSelectForReport2(date_start, date_end):
-    db = psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
+    db = dbstg.connectToDb()
     cursor = db.cursor()
     # Запрос по диапозону дат
     cursor.execute(
