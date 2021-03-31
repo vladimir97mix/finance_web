@@ -53,8 +53,9 @@ def pgInsertUpdateIncome(values):
     else:
         cursor.execute("""UPDATE income SET
                    incomeyana = incomeyana + {0},
-                   incomevova = incomevova + {1}
-                   WHERE date = '{2}'""".format(values[1], values[2], date))
+                   incomevova = incomevova + {1},
+                   reserve = reserve + {2}
+                   WHERE date = '{2}'""".format(values[1], values[2], values[3], date))
         db.commit()
         db.close()
 

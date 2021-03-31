@@ -37,8 +37,9 @@ def income():
         date = request.form['date']
         income1 = request.form['text1']
         income2 = request.form['text2']
+        reserve = request.form['text3']
 
-        incomeTuple = (date, income1, income2)
+        incomeTuple = (date, income1, income2, reserve)
 
         queries.pgInsertUpdateIncome(incomeTuple)
         return redirect('/income')
@@ -86,14 +87,15 @@ def report2():
         # Запрос в базу данных по диапозону дат
         row = queries.pgSelectForReport2(date_start, date_end)
         # Подсчет итоговых значений
-        r1, r2 = 0, 0
+        r1, r2, r3 = 0, 0, 0
         total = 0.0
         for el in row:
             r1 += el[1]
             r2 += el[2]
+            r3 += el[3]
             for elem in el[1:]:
                 total = total + elem
-        list_total = [str(r1), str(r2), str(total)]
+        list_total = [str(round(r1, 2)), str(round(r2, 2)), str(round(r3, 2)), str(round(total, 2))]
         return render_template('report2.html', row=row, date_start=date_start, date_end=date_end, list_total=list_total)
 
     else:

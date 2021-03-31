@@ -10,7 +10,7 @@
 </head>
  <body>
 
- <nav class="navbar navbar-dark bg-dark">
+ <nav class="navbar fixed-top navbar-dark bg-dark">
      <div class="form-inline">
 
      <form  method="post">
@@ -29,7 +29,9 @@
       <th>Дата</th>
       <th>Доходы Яна</th>
       <th>Доходы Вова</th>
-        <th >ИТОГО:</th>
+      <th>Резерв</th>
+
+      <th >ИТОГО:</th>
     </tr>
   </thead>
   <tbody>
@@ -38,12 +40,13 @@
         {% for el in row %}
         {% for el in el %}
 
-      <td>
-          {{el}}
-
-      </td>
+    <td>
+        {{el}}
         {% endfor %}
-
+    </td>
+    <td>
+    <b>{{el[1] + el[2]}}</b>
+    </td>
     </tr>
     {% endfor %}
     <tr>
