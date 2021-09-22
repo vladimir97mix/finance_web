@@ -5,8 +5,9 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/simplex/bootstrap.min.css">
-    <title>Отчет</title>
+    <title>Отчет - Расходы</title>
 </head>
  <body>
 
@@ -21,38 +22,38 @@
     </form>
          </div>
 </nav>
+ 
 <div class="container mt-5">
     <h4>{{date_start}} - {{date_end}}</h4>
 <table class="table">
   <thead class="thead-dark">
     <tr>
-      <th>Дата</th>
-      <th>Продукты</th>
-      <th>Продукты бытовые</th>
+        <th>Дата</th>
+        <th>Продукты</th>
+        <th>Продукты бытовые</th>
         <th>Одежда</th>
         <th>Здоровье</th>
-      <th>Кредиты</th>
+        <th>Кредиты</th>
         <th>Связь</th>
         <th>Транспорт </th>
         <th>Развлечения</th>
         <th >ИТОГО:</th>
+
     </tr>
   </thead>
   <tbody>
-
     <tr>
         {% for el in row %}
         {% for el in el %}
 
       <td>
-          {{el}}
-
+              {{el}}
       </td>
         {% endfor %}
-
         <td>
-            <b>{{el[1]+el[2]+el[3]+el[4]+el[5]+el[6]+el[7]+el[8]}}</b>
+            <b>{{'%0.2f'|format(el[1]+el[2]+el[3]+el[4]+el[5]+el[6]+el[7]+el[8])}}</b>
         </td>
+
     </tr>
     {% endfor %}
     <tr>
@@ -61,12 +62,9 @@
 
         <th>{{el}}</th>
     {% endfor %}
-
     </tr>
-
   </tbody>
 </table>
 </div>
-
  </body>
 </html>

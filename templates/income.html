@@ -16,21 +16,19 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 <nav class="navbar navbar-dark bg-dark">
-    <div class="row">
-        <div>
-        <a class="btn btn-success btn-md btn-block" href="/costs">Расходы</a>
-    </div>
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle"
+        <a class="navbar-brand" href="/costs">Расходы</a>
+
+        <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle"
           type="button" id="dropdownMenu1" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-    Отчеты
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <a class="dropdown-item" href="/report">Доходы</a>
-    <a class="dropdown-item" href="/report2">Расходы</a>
-  </div>
-</div>
+        Отчеты
+        </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <a class="dropdown-item" href="/report">Расходы</a>
+            <a class="dropdown-item" href="/report2">Доходы</a>
+            <a class="dropdown-item" href="/yearreport">Годовой</a>
+            </div>
         </div>
 </nav>
 
@@ -42,7 +40,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm1">Дата</span>
         </div>
-        <input required type="date" name="date" class="form-control form-control-sm">
+        <input required type="date" name="date" class="form-control form-control-sm" value={{date}}>
     </div>
     <br>
     <div class="input-group input-group-sm">

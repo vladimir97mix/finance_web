@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template, url_for, request, redirect
 from queries import queries
-
 app = Flask(__name__)
 
 
@@ -24,7 +23,7 @@ def index():
 
         # Вносим данные в таблицу
         queries.pgInsertUpdateCosts(costsTuple)
-        return redirect('/')
+        return render_template("index.html", date=date)
 
     # Если метод GET
     else:
@@ -42,7 +41,7 @@ def income():
         incomeTuple = (date, income1, income2, reserve)
 
         queries.pgInsertUpdateIncome(incomeTuple)
-        return redirect('/income')
+        return render_template("income.html", date=date)
     else:
         return render_template('income.html')
 
@@ -69,8 +68,8 @@ def report():
             r8 += el[8]
             for elem in el[1:]:
                 total = total + elem
-        list_total = [str(round(r1,2)), str(round(r2,2)), str(round(r3,2)), str(round(r4,2)), str(round(r5,2)),
-                      str(round(r6,2)), str(round(r7,2)), str(round(r8,2)), str(round(total,2))]
+        list_total = [str(round(r1, 2)), str(round(r2, 2)), str(round(r3, 2)), str(round(r4, 2)), str(round(r5, 2)),
+                      str(round(r6, 2)), str(round(r7, 2)), str(round(r8, 2)), str(round(total, 2))]
 
         # Вернуть результат на веб страницу
         return render_template('report.html', row=row, date_start=date_start, date_end=date_end, list_total=list_total)
@@ -93,7 +92,7 @@ def report2():
             r1 += el[1]
             r2 += el[2]
             r3 += el[3]
-            for elem in el[1:]:
+            for elem in el[1:3]:
                 total = total + elem
         list_total = [str(round(r1, 2)), str(round(r2, 2)), str(round(r3, 2)), str(round(total, 2))]
         return render_template('report2.html', row=row, date_start=date_start, date_end=date_end, list_total=list_total)
@@ -102,5 +101,15 @@ def report2():
         return render_template('report2.html')
 
 
+@app.route('/yearreport', methods=['POST', 'GET'])
+def yearReport():
+    if request.method == 'POST':
+        year = request.form['year']
+
+    else:
+        listOfYears = queries.pgSelectForYearreport()
+        return render_template('yearreport.html', years=listOfYears)
+
+
 if __name__ == '__main__':
-    app.run(debug=True, host="localhost")
+    app.run(debug=True, host="192.168.0.171", port=80)

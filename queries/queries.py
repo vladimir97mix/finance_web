@@ -55,7 +55,7 @@ def pgInsertUpdateIncome(values):
                    incomeyana = incomeyana + {0},
                    incomevova = incomevova + {1},
                    reserve = reserve + {2}
-                   WHERE date = '{2}'""".format(values[1], values[2], values[3], date))
+                   WHERE date = '{3}'""".format(values[1], values[2], values[3], date))
         db.commit()
         db.close()
 
@@ -68,3 +68,11 @@ def pgSelectForReport2(date_start, date_end):
         """SELECT * FROM income WHERE (Date BETWEEN '{0}' AND '{1}')""".format(str(date_start), str(date_end)))
     row = cursor.fetchall()
     return row
+
+
+def pgSelectForYearreport():
+    db=dbstg.connectToDb()
+    cursor = db.cursor()
+    cursor.execute("select DISTINCT date_part('year', date) from costs")
+    listOfYears = cursor.fetchall()
+    return listOfYears
