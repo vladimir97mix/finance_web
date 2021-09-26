@@ -103,13 +103,24 @@ def report2():
 
 @app.route('/yearreport', methods=['POST', 'GET'])
 def yearReport():
+    listOfYears = queries.pgSelectForYearReport()
+    listOfMonths = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
+                       'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
     if request.method == 'POST':
         year = request.form['year']
-
+        listOfSum = queries.pgSelectForYearReportCosts(year)
+        dictReport = dict(zip(listOfMonths, listOfSum))
+        listSumColumns = (0, 0, 0, 0, 0, 0, 0, 0)
+        for el in listOfSum:
+            for el2 in el:
+                listSumColumns = [round(x, 2) + round(y, 2) for x, y in zip(listSumColumns, el2)]
+        sumForYear = sum(listSumColumns)
+        listMean = [round(x / 12, 2) for x in listSumColumns]
+        return render_template('yearreport.html', dictReport=dictReport, listOfMonths=listOfMonths, years=listOfYears,
+                               year=year, sumForYear=sumForYear, listMean=listMean)
     else:
-        listOfYears = queries.pgSelectForYearreport()
         return render_template('yearreport.html', years=listOfYears)
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="192.168.0.171", port=80)
+    app.run(debug=True, host="0.0.0.0", port=80)

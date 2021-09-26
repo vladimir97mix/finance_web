@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/simplex/bootstrap.min.css">
-    <title>Отчет - Расходы</title>
+    <title>Отчет - Годовой</title>
 </head>
 
  <body>
@@ -18,6 +18,7 @@
 
 
 <nav class="navbar navbar-dark bg-dark">
+
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle"
               type="button" id="dropdownMenu1" data-toggle="dropdown"
@@ -27,6 +28,7 @@
 
       <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
         <form method="post">
+
         {% for el in years %}
         {% for el in el %}
         <input type="submit" class="dropdown-item" name="year" value={{'%0.0f'|format(el)}}>
@@ -35,6 +37,67 @@
         </form>
       </div>
     </div>
+    <a class="btn btn-secondary" href="/">На главную</a>
 </nav>
 
-</body>
+ <div class="container mt-5">
+     <h2>{{year}}</h2>
+<p>
+  <button class="btn btn-outline-dark btn-block" type="button" data-toggle="collapse" data-target="#collapseTable" aria-expanded="false" aria-controls="collapseTable">
+    Расходы
+  </button>
+</p>
+<div class="collapse" id="collapseTable">
+  <div class="card card-body">
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+        <th> </th>
+        <th>Продукты</th>
+        <th>Продукты бытовые</th>
+        <th>Одежда</th>
+        <th>Здоровье</th>
+        <th>Кредиты</th>
+        <th>Связь</th>
+        <th>Транспорт </th>
+        <th>Развлечения</th>
+        <th>ИТОГО:</th>
+    </tr>
+
+  </thead>
+  <tbody>
+    <tr>
+
+        {% for el in listOfMonths%}
+        {% for el2 in dictReport[el] %}
+        <th>{{el}}</th>
+        {% for el3 in el2 %}
+
+        <td>
+            {{'%0.2f'|format(el3)}}
+        </td>
+
+{% endfor %}
+        <td>
+            <b>{{'%0.2f'|format(el2[0]+el2[1]+el2[2]+el2[3]+el2[4]+el2[5]+el2[6]+el2[7])}}</b>
+        </td>
+{% endfor %}
+
+    </tr>
+
+{% endfor %}
+    <tr class="table-info">
+  <th>В среднем</th>
+  {% for el in listMean %}
+
+    <td>
+        {{el}}
+    </td>
+  {% endfor %}
+    <th>
+        {{sumForYear}}
+    </th>
+    </tr>
+  </tbody>
+
+ </body>
