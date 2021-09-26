@@ -94,3 +94,18 @@ def pgSelectForYearReportCosts(year):
         listOfSum.append(rows)
     db.close()
     return listOfSum
+
+
+def pgSelectForYearReportIncome(year):
+    db = dbstg.connectToDb()
+    cursor = db.cursor()
+    listOfSumIncome = []
+    for i in range(1, 13):
+        cursor.execute("select COALESCE(sum(incomeyana),0), COALESCE(sum(incomevova), 0), "
+                       "COALESCE(sum(reserve), 0) from income where date_part('year', date) = "
+                       "{0} and date_part('month', date) = {1};".format(year, i))
+        rows = cursor.fetchall()
+        listOfSumIncome.append(rows)
+    db.close()
+    return listOfSumIncome
+

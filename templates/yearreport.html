@@ -99,5 +99,63 @@
     </th>
     </tr>
   </tbody>
+</table>
+</div>
+</div>
+
+ <p>
+  <button class="btn btn-outline-dark btn-block" type="button" data-toggle="collapse" data-target="#collapseTable2" aria-expanded="false" aria-controls="collapseTable2">
+    Доходы
+  </button>
+</p>
+<div class="collapse" id="collapseTable2">
+    <div class="card card-body">
+        <table class="table">
+            <thead class="thead-dark">
+
+            <tr>
+              <th>  </th>
+              <th>Доходы Яна</th>
+              <th>Доходы Вова</th>
+              <th>Резерв</th>
+              <th >ИТОГО:</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    {% for el in listOfMonths%}
+                    {% for el2 in dictReport2[el] %}
+                    <th>{{el}}</th>
+                    {% for el3 in el2 %}
+
+                    <td>
+                        {{'%0.2f'|format(el3)}}
+                    </td>
+
+            {% endfor %}
+                    <td>
+                        <b>{{'%0.2f'|format(el2[0]+el2[1])}}</b>
+                    </td>
+            {% endfor %}
+
+                </tr>
+            {% endfor %}
+        <tr class="table-info">
+        <th>В среднем</th>
+        {% for el in listMeanIncome %}
+
+        <td>
+            {{el}}
+        </td>
+        {% endfor %}
+        <th>
+            {{sumIncomeForYear}}
+        </th>
+        </tr>
+        </table>
+    </div>
+</div>
+</div>
 
  </body>

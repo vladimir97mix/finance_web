@@ -101,23 +101,40 @@ def report2():
         return render_template('report2.html')
 
 
+# Годовой отчет
 @app.route('/yearreport', methods=['POST', 'GET'])
 def yearReport():
+    # Список суммы расходом по месяцам
     listOfYears = queries.pgSelectForYearReport()
     listOfMonths = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
                        'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
     if request.method == 'POST':
         year = request.form['year']
         listOfSum = queries.pgSelectForYearReportCosts(year)
-        dictReport = dict(zip(listOfMonths, listOfSum))
+        dictReport1 = dict(zip(listOfMonths, listOfSum))
         listSumColumns = (0, 0, 0, 0, 0, 0, 0, 0)
+        # Складываем списки
         for el in listOfSum:
             for el2 in el:
                 listSumColumns = [round(x, 2) + round(y, 2) for x, y in zip(listSumColumns, el2)]
+        # Общая сумма расходов за год
         sumForYear = sum(listSumColumns)
+        # Среднее значение за месяц по каждому критерию
         listMean = [round(x / 12, 2) for x in listSumColumns]
-        return render_template('yearreport.html', dictReport=dictReport, listOfMonths=listOfMonths, years=listOfYears,
-                               year=year, sumForYear=sumForYear, listMean=listMean)
+
+        listOfSumIncome = queries.pgSelectForYearReportIncome(year)
+        dictReport2 = dict(zip(listOfMonths, listOfSumIncome))
+        listSumColumnsIncome = (0, 0, 0, 0, 0, 0, 0, 0)
+        for el in listOfSumIncome:
+            for el2 in el:
+                listSumColumnsIncome = [round(x, 2) + round(y, 2) for x, y in zip(listSumColumnsIncome, el2)]
+        sumIncomeForYear = sum (listSumColumnsIncome)
+        listMeanIncome = [round(x / 12, 2) for x in listSumColumnsIncome]
+
+
+        return render_template('yearreport.html', dictReport=dictReport1, listOfMonths=listOfMonths, years=listOfYears,
+                               year=year, sumForYear=sumForYear, listMean=listMean, dictReport2=dictReport2,
+                               sumIncomeForYear=sumIncomeForYear, listMeanIncome=listMeanIncome)
     else:
         return render_template('yearreport.html', years=listOfYears)
 
